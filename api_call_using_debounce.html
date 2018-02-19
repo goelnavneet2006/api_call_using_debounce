@@ -1,0 +1,63 @@
+<script>
+  const debounce = (func, wait, immediate) => {
+    let timeout;
+    return (...args) => {
+      console.log("called");
+      const that = this;
+      const localFunc = () => {
+        timeout = null;
+        if (!callNow) {
+          console.log("actual call");
+          func.apply(that, args);
+        }
+      };
+      let callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(localFunc, wait);
+      if (callNow) {
+        console.log("actual call");
+        func.apply(that, args);
+      }
+    };
+  };
+
+  const callAPI = () => {
+    let prevCall = false;
+    return fetchAPI = () => {
+      console.log("calling API");
+      if (!prevCall) {
+        console.log("actually calling API");
+        prevCall = true;
+        const GITHUB_API_URL = "https://api.github.com/search/users?q=location:san%20clara&page=1";
+        const params = { method: 'GET' };
+        const request = new Request(GITHUB_API_URL, params);
+
+        fetch(request)
+          .then((response) => {
+            prevCall = false;
+            console.log("Response is:", response);
+            console.log("Response Body is:", response.text());
+          }, (error) => {
+            prevCall = false;
+            console.log("Error is:", error);
+          });
+      };
+    };
+  };
+
+  const debounceCallAPI = debounce(callAPI(), 1000);
+
+  debounceCallAPI();
+  debounceCallAPI();
+  debounceCallAPI();
+  debounceCallAPI();
+  debounceCallAPI();
+
+fetchcall = callAPI();
+fetchcall();
+fetchcall();
+fetchcall();
+fetchcall();
+fetchcall();
+
+</script>
